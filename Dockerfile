@@ -15,9 +15,12 @@ WORKDIR /opt/s3proxy
 
 COPY \
     --from=s3proxy-builder \
+    /opt/s3proxy/jmx-exporter.yaml \
     /opt/s3proxy/target/s3proxy \
     /opt/s3proxy/src/main/resources/run-docker-container.sh \
     /opt/s3proxy/
+
+ARG JMX_AGENT_VERSION="0.16.1"
 
 ENV \
     LOG_LEVEL="info" \
@@ -42,5 +45,9 @@ ENV \
     JCLOUDS_KEYSTONE_PROJECT_DOMAIN_NAME="" \
     JCLOUDS_FILESYSTEM_BASEDIR="/data"
 
-EXPOSE 80
+RUN apt-get update && apt-get -y install curl && \
+    curl -o jmx_prometheus_javaagent.jar \
+    https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/$JMX_AGENT_VERSION/jmx_prometheus_javaagent-$JMX_AGENT_VERSION.jar
+
+EXPOSE 80 8080
 ENTRYPOINT ["/opt/s3proxy/run-docker-container.sh"]

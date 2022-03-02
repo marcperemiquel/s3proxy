@@ -22,5 +22,6 @@ exec java \
     -Djclouds.keystone.scope="${JCLOUDS_KEYSTONE_SCOPE}" \
     -Djclouds.keystone.project-domain-name="${JCLOUDS_KEYSTONE_PROJECT_DOMAIN_NAME}" \
     -Djclouds.filesystem.basedir="${JCLOUDS_FILESYSTEM_BASEDIR}" \
+    -javaagent:/opt/s3proxy/jmx_prometheus_javaagent.jar=8080:jmx-exporter.yaml \
     -jar /opt/s3proxy/s3proxy \
     --properties /dev/null
